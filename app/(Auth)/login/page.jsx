@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Image from "next/image";
-import AxiosInstance from "@/axiosInstance";
+import AxiosInstance from "@/app/_utils/axiosInstance";
 import SnackBars from "@/app/_component/global/Snackbars";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
@@ -25,7 +25,6 @@ const Page = () => {
 
   function handel(e, fun) {
     fun(e);
-    console.log(e);
   }
 
   const validateForm = () => {
@@ -56,13 +55,13 @@ const Page = () => {
     };
     try {
       const response = await AxiosInstance.post("/api/v1/auth/signin", data);
-      console.log(response);
       setSuccess((e) => ({
         message: `hi ${response.data.user.name}`,
         view: true,
         status: true,
       }));
       dispatch(Data_Person_fun_get(response.data));
+
       router.push("/");
 
       setTimeout(() => {
@@ -120,6 +119,7 @@ const Page = () => {
                   className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter email"
                   name="email"
+                  autoComplete="email"
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">
@@ -156,7 +156,7 @@ const Page = () => {
                   type="password"
                   className="w-full rounded-lg border-gray-200 p-4 pe-12 text-sm shadow-sm"
                   placeholder="Enter password"
-                
+                autoComplete="current-password"
                 />
 
                 <span className="absolute inset-y-0 end-0 grid place-content-center px-4">

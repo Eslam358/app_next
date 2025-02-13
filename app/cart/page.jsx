@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from "react-redux";
 import { cart_items } from "../_reduxtoolkit/slice/Cart/Items_Cart";
 
 import { Remove_cart_item } from "../_reduxtoolkit/slice/Cart/Remove_Item";
+import Link from "next/link";
 
 const Page = () => {
   const data = useSelector((state) => state.cart_items);
@@ -32,7 +33,7 @@ const Page = () => {
             <div className="mt-8">
               <ul className="space-y-4">
                 {data?.data?.products.map((item) => (
-                  <li key={item.id} className="flex items-center gap-4">
+                  <li key={item._id} className="flex items-center gap-4">
                     <Image
                       src={item.product.imageCover}
                       alt="igg"
@@ -149,12 +150,12 @@ const Page = () => {
                   </div>
 
                   <div className="flex justify-end">
-                    <a
-                      href="#"
+                    <Link
+                      href="/checkout"
                       className="block rounded bg-gray-700 px-5 py-3 text-sm text-gray-100 transition hover:bg-primary"
                     >
                       Checkout
-                    </a>
+                    </Link>
                   </div>
                 </div>
               </div>

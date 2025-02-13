@@ -1,5 +1,4 @@
 "use client";
-import React, { useState, useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { useSelector, useDispatch } from "react-redux";
@@ -8,10 +7,11 @@ import { cart_items } from "../_reduxtoolkit/slice/Cart/Items_Cart.js";
 import Cover from "./global/cover";
 import ViewCart from "./cart/view_cart";
 import { usePathname } from "next/navigation";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const user_info = useSelector((state) => state.Data_Person);
-  console.log("user_info", user_info);
+  const order = localStorage.getItem("cartOwner");
   const cart_item_ = useSelector((state) => state.cart_items);
 
   const Pathname = usePathname();
@@ -19,13 +19,19 @@ const Navbar = () => {
   const dispatch = useDispatch();
   const [view_info, setView_info] = useState(false);
   const [view_cart, setView_cart] = useState(false);
+  const [viewOrder, setViewOrder] = useState(false);
+  const [orderData, setOrderData] = useState({});
+
+  const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
-    console.log(user_info.message === "success");
-    if (user_info.message === "success") {
+    setIsClient(true);
+  }, []);
+
+  useEffect(() => {
+    if (user_info.token) {
       dispatch(cart_items());
     }
-    console.log(" cart_item__useEffect__navbar", cart_item_);
   }, [user_info.token]);
 
   function sig_out() {
@@ -65,13 +71,16 @@ const Navbar = () => {
               </li>
 
               <li>
-                <a
-                  className="text-gray-500 transition hover:text-gray-500/75"
-                  href="#"
+                <Link
+                  // style={order ? { color: "red" } : {}}
+                  className={`text-gray-500 transition hover:text-gray-500/75 ${
+                    order ? "text-primary" : ""
+                  }`}
+                  href="/order"
                 >
                   {" "}
-                  History{" "}
-                </a>
+                  Order{" "}
+                </Link>
               </li>
 
               <li>
@@ -97,7 +106,7 @@ const Navbar = () => {
           </nav>
 
           <div className="flex items-center gap-4">
-            {!(user_info.message === "success") ? (
+            {!(isClient && user_info.message === "success") ? (
               <div className="sm:flex sm:gap-4">
                 <Link
                   className="block rounded-md bg-primary px-5 py-2.5 text-sm font-medium text-white transition hover:bg-secondary"
@@ -127,39 +136,48 @@ const Navbar = () => {
                       alt="logo"
                     />
                   </button>
-                  {view_info && (
-                    <section className="w-[300] rounded-3xl shadow-2xl absolute right-[-110] sm:right-0 top-14    bg-white z-20">
-                      <div className="p-8 text-center sm:p-12 ">
+
+                  <section
+                    style={{
+                      clipPath: `${
+                        view_info
+                          ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
+                          : "polygon(41% 0, 41% 0, 46% 100%, 46% 100%)"
+                      }  `,
+                      transition: "clip-path 0.3s ease-in-out",
+                    }}
+                    className="w-[300] rounded-3xl shadow-2xl absolute right-[-110] sm:right-0 top-14    bg-white z-20"
+                  >
+                    <div className="p-8 text-center sm:p-12 ">
+                      <Image
+                        src="/logo.svg"
+                        width={30}
+                        height={30}
+                        alt="logo"
+                        className="mx-auto mb-5"
+                      />
+                      <p className="flex text-sm font-semibold uppercase  text-primary justify-center gap-2">
                         <Image
-                          src="/logo.svg"
-                          width={30}
-                          height={30}
+                          src="/person_.svg"
+                          width={25}
+                          height={25}
                           alt="logo"
-                          className="mx-auto mb-5"
                         />
-                        <p className="flex text-sm font-semibold uppercase  text-primary justify-center gap-2">
-                          <Image
-                            src="/person_.svg"
-                            width={25}
-                            height={25}
-                            alt="logo"
-                          />
-                          {user_info?.user?.name}
-                        </p>
+                        {user_info?.user?.name}
+                      </p>
 
-                        <h3 className="mt-2 text-sm ">
-                          {user_info?.user?.email}
-                        </h3>
+                      <h3 className="mt-2 text-sm ">
+                        {user_info?.user?.email}
+                      </h3>
 
-                        <button
-                          className="mt-8 inline-block w-full rounded-full bg-pink-600 py-2 text-sm font-bold text-white shadow-xl"
-                          onClick={sig_out}
-                        >
-                          log out
-                        </button>
-                      </div>
-                    </section>
-                  )}
+                      <button
+                        className="mt-8 inline-block w-full rounded-full bg-pink-600 py-2 text-sm font-bold text-white shadow-xl"
+                        onClick={sig_out}
+                      >
+                        log out
+                      </button>
+                    </div>
+                  </section>
                 </div>
                 <div className="relative">
                   <button
@@ -179,7 +197,11 @@ const Navbar = () => {
                       {cart_item_.data?.products.length}
                     </span>
                   )}
-                  {view_cart && <ViewCart setView={setView_cart} />}
+                  <ViewCart
+                    view_cart={view_cart}
+                    setView={setView_cart}
+                    data={cart_item_}
+                  />
                 </div>
               </div>
             )}

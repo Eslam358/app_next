@@ -12,7 +12,6 @@ const Card = ({ data }) => {
   const add_to_cart = async (e, data) => {
     e.preventDefault();
 
-    console.log(data.id);
     await dispatch(cart_add_item(data.id));
     dispatch(cart_items());
   };

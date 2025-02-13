@@ -2,7 +2,7 @@
 
 import React, { useState, useReducer } from "react";
 import Image from "next/image";
-import AxiosInstance from "@/axiosInstance";
+import AxiosInstance from "@/app/_utils/axiosInstance";
 import Cookies from "js-cookie";
 import SnackBars from "@/app/_component/global/Snackbars";
 import Link from "next/link";
@@ -17,7 +17,7 @@ const Page = () => {
 
   function handel(e, fun) {
     fun(e);
-    console.log(e);
+
   }
 
   const validateForm = () => {
@@ -56,10 +56,9 @@ const Page = () => {
       phone: phone.toString().replaceAll(" ", ""),
     };
     try {
-      console.log("data.......", data);
       
       const response = await AxiosInstance.post("/api/v1/auth/signup", data);
-      console.log(response)
+
 
       Cookies.set("Data_person", JSON.stringify(response.data));
       setTimeout(() => {}, 3000);

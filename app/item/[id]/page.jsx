@@ -1,5 +1,5 @@
 import React from "react";
-import AxiosInstance from "@/axiosInstance";
+import AxiosInstance from "@/app/_utils/axiosInstance";
 import Image from "next/image";
 
 const ItemDetails = async ({ params }) => {

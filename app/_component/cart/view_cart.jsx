@@ -8,9 +8,8 @@ import { cart_items } from "../../_reduxtoolkit/slice/Cart/Items_Cart";
 import { Remove_cart_item } from "../../_reduxtoolkit/slice/Cart/Remove_Item";
 import { useRouter } from "next/navigation";
 
-const ViewCart = ({ setView }) => {
+const ViewCart = ({ setView, view_cart }) => {
   const data = useSelector((state) => state.cart_items);
-  console.log("ViewCart", data);
 
   const dispatch = useDispatch();
 
@@ -22,7 +21,6 @@ const ViewCart = ({ setView }) => {
 
   const remove_from_cart = (e, data) => {
     e.preventDefault();
-    console.log(data.product.id);
     dispatch(Remove_cart_item(data.product.id));
     dispatch(cart_items());
   };
@@ -34,7 +32,15 @@ const ViewCart = ({ setView }) => {
   return (
     <div>
       <div
-        className="absolute z-20 end-[-70] sm:end-0  w-screen max-w-sm border border-gray-600 bg-gray-100 px-4 py-8 sm:px-6 lg:px-8"
+        style={{
+          clipPath: `${
+            view_cart
+              ? "polygon(0 0, 100% 0, 100% 100%, 0 100%)"
+              : "polygon(100% 100%, 100% 100%, 100% 100%, 100% 100%)"
+          }  `,
+          transition: "clip-path 0.3s ease-in-out",
+        }}
+        className="absolute z-20 end-[-70] sm:end-0  w-screen max-w-sm border border-gray-600 bg-gray-100 px-4 py-8 sm:px-6 lg:px-8 translate-x-10"
         aria-modal="true"
         role="dialog"
         tabIndex="-1"
@@ -158,7 +164,7 @@ const ViewCart = ({ setView }) => {
         </div>
       </div>
 
-      <Cover setView={setView} />
+      {view_cart && <Cover setView={setView} />}
     </div>
   );
 };

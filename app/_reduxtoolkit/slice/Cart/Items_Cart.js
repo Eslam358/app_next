@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
 import Cookies from "js-cookie";
-import AxiosInstance from "@/axiosInstance";
+import AxiosInstance from "@/app/_utils/axiosInstance";
+
 // ---------------------------------------------------------
 
 const cart_items_ = async () => {
@@ -19,7 +20,6 @@ export const cart_items = createAsyncThunk(
     try {
       // استدعاء دالة API التي تستخدم axios
       const response = await cart_items_();
-      console.log(response)
 
       return response; // إرجاع البيانات إذا نجح الطلب
     } catch (error) {
@@ -39,6 +39,7 @@ const cart_items__ = createSlice({
     },
     loading: false,
     error: null,
+    cartId: null,
   },
   reducers: {
     refresh_cart: (state, action) => {
@@ -90,9 +91,12 @@ const cart_items__ = createSlice({
       // الحالة عندما يكون الطلب قد تم بنجاح
       .addCase(cart_items.fulfilled, (state, action) => {
         state.loading = false;
-        state.data.products = action.payload.data.products;
-        console.log(" state.data.products = action.payload.data.products",action.payload.data.products )
-        state.data.totalCartPrice = action.payload.data.totalCartPrice;
+        state.data = action.payload.data;
+        state.cartId = action.payload.cartId;
+        state.cartOwner = action.payload.data.cartOwner;
+        state.test = action.payload;
+        // state.data.totalCartPrice = action.payload.data.totalCartPrice;
+        // state.data.idCard = action.payload.data.totalCartPrice;
       })
       // الحالة عندما يفشل الطلب
       .addCase(cart_items.rejected, (state, action) => {

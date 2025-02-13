@@ -1,5 +1,5 @@
 import Card from "./card";
-import AxiosInstance from "@/axiosInstance";
+import AxiosInstance from "@/app/_utils/axiosInstance";
 
 import React from "react";
 
@@ -9,6 +9,10 @@ const Main = async () => {
   let data = response.data.data;
   return (
     <div>
+
+
+
+      
       <h1 className="text-2xl font-bold text-center p-7 ">Api ssr</h1>
 
       <div className="mx-auto max-w-screen-xl grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-5 justify-items-center">

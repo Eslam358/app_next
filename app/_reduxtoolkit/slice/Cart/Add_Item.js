@@ -1,5 +1,5 @@
 import { createAsyncThunk, createSlice } from "@reduxjs/toolkit";
-import AxiosInstance from "@/axiosInstance";
+import AxiosInstance from "@/app/_utils/axiosInstance";
 // ---------------------------------------------------------
 const postData_cart_item = async (data) => {
   let response = await AxiosInstance.post("/api/v1/cart", {  productId: data});
